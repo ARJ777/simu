@@ -12,7 +12,8 @@ import javax.swing.ImageIcon;
  */
 public abstract class ImageFactory {
 
-	private static final File ROOT = new File("images");
+	private static final String IMAGE_ROOT = "images/";
+	private static final File IMAGE_ROOT_FILE = new File(IMAGE_ROOT);
 	
 	private ImageFactory() {};
 	
@@ -22,10 +23,19 @@ public abstract class ImageFactory {
 	 * @param path - The relative path to the image.
 	 * @return The image icon.
 	 */
-	public static ImageIcon loadImage(String path) {
+	public static ImageIcon loadImageIcon(String path) {
+		return new ImageIcon(IMAGE_ROOT + path);
+	}
+
+	/**
+	 * Loads an image from file.
+	 * 
+	 * @param path - The relative path to the image.
+	 * @return The image.
+	 */
+	public static BufferedImage loadImage(String path) {
 		try {
-			BufferedImage img = ImageIO.read(new File(ROOT, path));
-			return new ImageIcon(img);
+			return ImageIO.read(new File(IMAGE_ROOT_FILE, path));
 		} catch (IOException e) {
 			throw new IllegalArgumentException(e);
 		}

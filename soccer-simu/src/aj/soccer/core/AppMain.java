@@ -20,11 +20,8 @@ public class AppMain {
     }
     
     private static void createAndShowGUI() {
-        JFrame f = new AppGUI();
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.pack();
-        //f.setSize(250,250);
-        f.setVisible(true);
+        AppGUI f = new AppGUI();
+        f.display();
     }
-    
+
 }

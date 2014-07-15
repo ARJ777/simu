@@ -1,15 +1,12 @@
 package aj.soccer.graphics;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 /**
  * Provides the GUI for the application.
@@ -17,27 +14,38 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class AppGUI extends JFrame {
 
-	private static final String BACKGROUND_IMG_PATH = "Soccer-pitch.jpg";
+	private static final String ICON_IMAGE_PATH = "Soccer_ball.jpg";
+	
+	private BackgroundGUI background;
 
 	public AppGUI() {
-		add(initBackground());
-		setJMenuBar(initMenus());
+		setLookAndFeel();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("AJ's Soccer Simulator");
+		//setIconImage(ImageFactory.loadImage(ICON_IMAGE_PATH));
 	}
 
-	private JMenuBar initMenus() {
-		JMenuBar menuBar = new JMenuBar();
-		JMenu fileMenu = new JMenu("File");
-		JMenuItem dataItem = new JMenuItem("Data");
-		fileMenu.add(dataItem);
-		menuBar.add(fileMenu);
-		return menuBar;
+	private static void setLookAndFeel() {
+		try {
+			UIManager.setLookAndFeel(new NimbusLookAndFeel());
+		} catch (UnsupportedLookAndFeelException e) {
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (ClassNotFoundException | InstantiationException
+					| IllegalAccessException | UnsupportedLookAndFeelException e1) {
+				throw new IllegalStateException(e1);
+			}
+		}
 	}
 
-	private JPanel initBackground() {
-			JLabel label = new JLabel(ImageFactory.loadImage(BACKGROUND_IMG_PATH));
-			JPanel panel = new JPanel();
-			panel.add(label);
-			return panel;
+	public void display() {
+		background = new BackgroundGUI();
+		add(background.getPanel());
+		MenuGUI menuGUI = new MenuGUI();
+		setJMenuBar(menuGUI.getMenuBar());
+        pack();
+        //setSize(250,250);
+        setVisible(true);
 	}
-
+    
 }
