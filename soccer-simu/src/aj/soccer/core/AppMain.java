@@ -1,6 +1,5 @@
 package aj.soccer.core;
 
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import aj.soccer.graphics.AppGUI;
