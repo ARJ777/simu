@@ -15,6 +15,7 @@ import aj.soccer.teams.TeamFactory;
  */
 public class MenuGUI implements ActionListener {
 
+	private static final String REFRESH_TEAMS = "Refresh Teams";
 	private static final String SELECT_TEAM = "Select Team";
 
 	/** Circular reference to main GUI for call-backs. */
@@ -31,21 +32,30 @@ public class MenuGUI implements ActionListener {
 	 */
 	public JMenuBar getMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
+		menuBar.add(getTeamsMenu());
+		return menuBar;
+	}
+
+	private JMenu getTeamsMenu() {
 		JMenu teamsMenu = new JMenu("Teams");
+		JMenuItem refreshTeamsMenu = new JMenuItem(REFRESH_TEAMS);
+		refreshTeamsMenu.addActionListener(this);
+		teamsMenu.add(refreshTeamsMenu);
 		JMenuItem selectTeamMenu = new JMenuItem(SELECT_TEAM);
 		selectTeamMenu.addActionListener(this);
 		teamsMenu.add(selectTeamMenu);
-		menuBar.add(teamsMenu);
-		return menuBar;
+		return teamsMenu;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		System.out.printf("Event performed: %s%n", event);
-		if (event.getActionCommand() == SELECT_TEAM) {
-			String teamName = appGUI.selectOne("Select a team", TeamFactory.getTeamNames());
-			Team team = (teamName == null) ? null : TeamFactory.loadTeam(teamName);
+		final String command = event.getActionCommand();
+		if (command == SELECT_TEAM) {
+			Team team = appGUI.selectOne("Select a team", TeamFactory.getTeams());
 			appGUI.setTeam(team);
+		} else if (command == REFRESH_TEAMS) {
+			TeamFactory.refreshTeams();
 		}
 	}
 

@@ -5,6 +5,8 @@ import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import aj.soccer.images.ImageFactory;
+
 /**
  * Encapsulates the background soccer pitch, and the drawing of all player sprites.
  */

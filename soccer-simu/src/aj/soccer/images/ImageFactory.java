@@ -1,4 +1,4 @@
-package aj.soccer.graphics;
+package aj.soccer.images;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
