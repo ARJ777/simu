@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 
 /**
@@ -48,6 +49,14 @@ public class GenericGUIImpl implements GenericGUI {
 			return list.getSelectedIndices();
 		}
 		return null;
+	}
+
+	@Override
+	public void displayError(String title, String message) {
+		JTextArea text = new JTextArea();
+		text.setEditable(false);
+		text.setText(message);
+		JOptionPane.showMessageDialog(frame, new JScrollPane(text), title, JOptionPane.ERROR_MESSAGE);
 	}
 
 }

@@ -30,4 +30,12 @@ public interface GenericGUI {
 	 */
 	public <T> int/*@Nullable*/[] selectMany(String title, List<T> selections, int[] selected);
 
+	/**
+	 * Displays an error dialog.
+	 * 
+	 * @param title - The title of the dialog.
+	 * @param message - The error message.
+	 */
+	public void displayError(String title, String message);
+
 }

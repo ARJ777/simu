@@ -1,5 +1,6 @@
 package aj.soccer.gui;
 
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -12,9 +13,8 @@ import aj.soccer.teams.Team;
 /**
  * Provides the GUI for the application.
  */
-public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp {
+public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp, UncaughtExceptionHandler {
 
-	private final JFrame frame = new JFrame();
 	private Display display;
 	private Team team = null;
 
@@ -39,6 +39,7 @@ public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp {
 	}
 
 	public void display() {
+		Thread.setDefaultUncaughtExceptionHandler(this);
 		display = new Display(this);
 		frame.add(display.getPanel());
 		Menus menuGUI = new Menus(this);
@@ -62,5 +63,10 @@ public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp {
 	private void undrawTeam(Team team) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void uncaughtException(Thread thread, Throwable e) {
+		displayError("Exception", e.getMessage());
 	}
 }

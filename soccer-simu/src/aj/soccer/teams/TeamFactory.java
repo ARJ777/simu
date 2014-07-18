@@ -106,7 +106,6 @@ public abstract class TeamFactory {
 			}
 		}
 		Team team = new TeamImpl(teamName, players);
-		autoSelectPlayers(team);
 		return team;
 	}
 
@@ -115,7 +114,7 @@ public abstract class TeamFactory {
 	 * 
 	 * @param team - The team.
 	 */
-	public static void autoSelectPlayers(Team team) {
+	public static void autoSelectPlayers(Team team/*,Formation formation*/) {
 		clearPlayers(team);
 		//choosePlayers();
 		//assignPlayers();
