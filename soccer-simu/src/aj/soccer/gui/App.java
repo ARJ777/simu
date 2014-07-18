@@ -12,7 +12,7 @@ import aj.soccer.teams.Team;
 /**
  * Provides the GUI for the application.
  */
-public class App extends GenericGUIImpl implements MenuToApp, DisplayToApp {
+public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp {
 
 	private final JFrame frame = new JFrame();
 	private Display display;

@@ -1,5 +1,8 @@
 package aj.soccer.gui;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JDialog;
@@ -28,6 +31,21 @@ public class GenericGUIImpl implements GenericGUI {
 		if (ret instanceof Integer && ((int) ret) == JOptionPane.OK_OPTION) {
 			int selection = list.getSelectedIndex();
 			if (selection >= 0) return selections.get(selection);
+		}
+		return null;
+	}
+
+	@Override
+	public <T> int[] selectMany(String title, List<T> selections, int[] selected) {
+		JList<Object> list = new JList<>(selections.toArray());
+		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		list.setSelectedIndices(selected);
+		JOptionPane pane = new JOptionPane(new JScrollPane(list), JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+		JDialog dialog = pane.createDialog(frame, title);
+		dialog.setVisible(true);
+		Object ret = pane.getValue();
+		if (ret instanceof Integer && ((int) ret) == JOptionPane.OK_OPTION) {
+			return list.getSelectedIndices();
 		}
 		return null;
 	}

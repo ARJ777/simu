@@ -19,9 +19,9 @@ public class Menus implements ActionListener {
 	private static final String SELECT_TEAM = "Select Team";
 
 	/** Circular reference to main GUI for call-backs. */
-	private final MenuToApp appGUI;
+	private final MenusToApp appGUI;
 
-	public Menus(MenuToApp appGUI) {
+	public Menus(MenusToApp appGUI) {
 		this.appGUI = appGUI;
 	}
 

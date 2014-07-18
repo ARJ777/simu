@@ -16,10 +16,12 @@ import java.util.List;
  */
 public abstract class TeamFactory {
 
-	private static final String TEAM_FILE_EXT = ".dat";
 	private static final File TEAM_FILE_ROOT = new File("teams");
+	private static final String TEAM_FILE_EXT = ".dat";
 	private static final String COMMENT_MARKER = "#";
 	private static final String FIELD_SEPARATOR = ",";
+	private static final int NAME_FIELD_INDEX = 0;
+	private static final int POSITIONS_FIELD_INDEX = 2;
 
 	private static List<Team> teams = null;
 	
@@ -103,12 +105,44 @@ public abstract class TeamFactory {
 				throw new IllegalStateException(e);
 			}
 		}
-		return new TeamImpl(teamName, players);
+		Team team = new TeamImpl(teamName, players);
+		autoSelectPlayers(team);
+		return team;
+	}
+
+	/**
+	 * Automatically selects a field of players. 
+	 * 
+	 * @param team - The team.
+	 */
+	public static void autoSelectPlayers(Team team) {
+		clearPlayers(team);
+		//choosePlayers();
+		//assignPlayers();
+	}
+
+	private static void clearPlayers(Team team) {
+		for (Player player : team.getPlayers()) {
+			player.setActive(false);
+			player.setPosition(null);
+		}
 	}
 
 	private static Player parsePlayer(String line) {
 		String[] fields = line.split(FIELD_SEPARATOR);
-		return new PlayerImpl(fields[0].trim());
+		return new PlayerImpl(
+				fields[NAME_FIELD_INDEX].trim(), 
+				getPositions(fields[POSITIONS_FIELD_INDEX].trim())
+		);
+	}
+
+	private static List<Position> getPositions(String positionCodes) {
+		final int length = positionCodes.length();
+		List<Position> positions = new ArrayList<>(length);
+		for (int i = 0; i < length; i++) {
+			positions.set(i, Position.fromCode(positionCodes.charAt(i)));
+		}
+		return positions;
 	}
 
 }

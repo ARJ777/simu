@@ -7,7 +7,7 @@ import aj.soccer.teams.Team;
 /**
  * Specifies the interface for call-backs to the main application from the menu component.
  */
-public interface MenuToApp {
+public interface MenusToApp {
 
 	/**
 	 * Displays a dialog to select one of a list of items.
