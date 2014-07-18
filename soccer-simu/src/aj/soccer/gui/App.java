@@ -1,4 +1,4 @@
-package aj.soccer.graphics;
+package aj.soccer.gui;
 
 import java.util.List;
 
@@ -12,13 +12,13 @@ import aj.soccer.teams.Team;
 /**
  * Provides the GUI for the application.
  */
-public class AppGUI extends GenericGUIImpl implements MenuToAppGUI, DisplayToAppGUI {
+public class App extends GenericGUIImpl implements MenuToApp, DisplayToApp {
 
 	private final JFrame frame = new JFrame();
-	private DisplayGUI display;
+	private Display display;
 	private Team team = null;
 
-	public AppGUI() {
+	public App() {
 		setLookAndFeel();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("AJ's Soccer Simulator");
@@ -39,9 +39,9 @@ public class AppGUI extends GenericGUIImpl implements MenuToAppGUI, DisplayToApp
 	}
 
 	public void display() {
-		display = new DisplayGUI(this);
+		display = new Display(this);
 		frame.add(display.getPanel());
-		MenuGUI menuGUI = new MenuGUI(this);
+		Menus menuGUI = new Menus(this);
 		frame.setJMenuBar(menuGUI.getMenuBar());
         frame.pack();
         //setSize(250,250);

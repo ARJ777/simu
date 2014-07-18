@@ -1,4 +1,4 @@
-package aj.soccer.graphics;
+package aj.soccer.gui;
 
 import java.util.List;
 

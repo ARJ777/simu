@@ -1,8 +1,8 @@
-package aj.soccer.core;
+package aj.soccer.main;
 
 import javax.swing.SwingUtilities;
 
-import aj.soccer.graphics.AppGUI;
+import aj.soccer.gui.App;
 
 /**
  * Launches the application.
@@ -19,7 +19,7 @@ public class AppMain {
     }
     
     private static void createAndShowGUI() {
-        AppGUI f = new AppGUI();
+        App f = new App();
         f.display();
     }
 

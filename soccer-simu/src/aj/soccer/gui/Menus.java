@@ -1,4 +1,4 @@
-package aj.soccer.graphics;
+package aj.soccer.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,15 +13,15 @@ import aj.soccer.teams.TeamFactory;
 /**
  * Encapsulates the application menus.
  */
-public class MenuGUI implements ActionListener {
+public class Menus implements ActionListener {
 
 	private static final String REFRESH_TEAMS = "Refresh Teams";
 	private static final String SELECT_TEAM = "Select Team";
 
 	/** Circular reference to main GUI for call-backs. */
-	private final MenuToAppGUI appGUI;
+	private final MenuToApp appGUI;
 
-	public MenuGUI(MenuToAppGUI appGUI) {
+	public Menus(MenuToApp appGUI) {
 		this.appGUI = appGUI;
 	}
 
