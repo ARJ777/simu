@@ -21,7 +21,9 @@ public abstract class TeamFactory {
 	private static final String COMMENT_MARKER = "#";
 	private static final String FIELD_SEPARATOR = ",";
 	private static final int NAME_FIELD_INDEX = 0;
-	private static final int POSITIONS_FIELD_INDEX = 2;
+	private static final int IMAGE_NUMBER_FIELD_INDEX = 1;
+	private static final int JERSEY_NUMBER_FIELD_INDEX = 2;
+	private static final int POSITIONS_FIELD_INDEX = 3;
 
 	private static List<Team> teams = null;
 	
@@ -93,6 +95,8 @@ public abstract class TeamFactory {
 
 	private static Team parseTeam(final String teamName, BufferedReader reader) {
 		final List<Player> players = new ArrayList<>();
+		Formation formation = null;
+		boolean hasHeader = false;
 		String line = null;
 		while (true) {
 			try {
@@ -100,12 +104,19 @@ public abstract class TeamFactory {
 				if (line == null) break;
 				line = line.trim();
 				if (line.isEmpty() || line.startsWith(COMMENT_MARKER)) continue;
-				players.add(parsePlayer(line));
+				if (hasHeader) {
+					players.add(parsePlayer(line));
+				} else {
+					formation = FormationFactory.getFormation(line);
+					if (formation == null)
+						throw new IllegalStateException("Unknown formation: " + line);
+					hasHeader = true;
+				}
 			} catch (IOException e) {
 				throw new IllegalStateException(e);
 			}
 		}
-		Team team = new TeamImpl(teamName, players);
+		Team team = new TeamImpl(teamName, players, formation);
 		return team;
 	}
 
@@ -139,7 +150,7 @@ public abstract class TeamFactory {
 		final int length = positionCodes.length();
 		List<Position> positions = new ArrayList<>(length);
 		for (int i = 0; i < length; i++) {
-			positions.set(i, Position.fromCode(positionCodes.charAt(i)));
+			positions.add(Position.fromCode(positionCodes.charAt(i)));
 		}
 		return positions;
 	}

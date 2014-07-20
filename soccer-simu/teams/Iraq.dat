@@ -1,16 +1,15 @@
-# Each line is either blank, a comment, or holds a single player's details with comma-separated fields.
-# Fields: 
-#   1. Name.
-#   2. Image number, or * for any.
-#   3. Preferred position(s) (G=goal, D=defence, M=mid-field, F=forward). 
-Majid,*,G
-Salim,*,D
-Mahmoud,*,D
-Radihi,*,D
-Al-Rubai'i,*,M
-Jassim,*,M
-Tuertz,*,M
-Allawi,*,M
-Radhi,*,M
-Raish,*,F
-Hamza,*,F
+# Formation
+3-5-2
+
+# Players
+Majid,*,1,G
+Salim,*,2,D
+Mahmoud,*,3,D
+Radihi,*,4,D
+Al-Rubai'i,*,5,M
+Jassim,*,6,M
+Tuertz,*,7,M
+Allawi,*,8,M
+Radhi,*,10,F
+Raish,*,9,M
+Hamza,*,11,F

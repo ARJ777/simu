@@ -25,4 +25,11 @@ public interface MenusToApp {
 	 */
 	void setTeam(Team team);
 
+	/**
+	 * Specifies the computer's team.
+	 * 
+	 * @param team - The new team.
+	 */
+	void setOpponentTeam(Team team);
+
 }

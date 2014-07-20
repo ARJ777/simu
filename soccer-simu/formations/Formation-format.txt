@@ -1,0 +1,11 @@
+# A formation file is named from the numbers of players in each position, separated by hyphens,
+# and with the ".dat" file extension.
+# The formation numbers specify the numbers of defenders, mid-fielders and forwards,
+# e.g. D-M-F.dat specifies 1 goal keeper, D defenders, M mid-fielders and F forwards.
+
+# Each line in the file is either blank, a comment starting with a hash, or holds data.
+# Each data line has the following fields separated by commas:
+# Fields: 
+#   1. The player's position (G=goal, D=defence, M=mid-field, F=forward).
+#   2. The player's starting x-coordinate, scaled to be in [0,1].
+#   3. The player's starting y-coordinate, scaled to be in [0,1].

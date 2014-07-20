@@ -17,6 +17,7 @@ public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp, Unc
 
 	private Display display;
 	private Team team = null;
+	private Team opponent = null;
 
 	public App() {
 		setLookAndFeel();
@@ -52,6 +53,12 @@ public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp, Unc
 	public void setTeam(Team team) {
 		if (this.team != null) undrawTeam(this.team);
 		this.team = team;
+		drawTeam(team);
+	}
+
+	public void setOpponentTeam(Team team) {
+		if (this.opponent != null) undrawTeam(this.opponent);
+		this.opponent = team;
 		drawTeam(team);
 	}
 

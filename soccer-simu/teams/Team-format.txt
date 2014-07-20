@@ -1,0 +1,10 @@
+# A team file is named from the team name, with spaces replaced by underscores,
+# and with the ".dat" file extension.
+# Each line in the file is either blank, a comment starting with a hash, or holds data.
+# The header line specifies the preferred formation.
+# Each subsequent line specifies a single player's details with comma-separated fields.
+# Fields: 
+#   1. The player's name.
+#   2. The player's jersey number.
+#   3. The number of the icon image file, or * for any.
+#   4. The player's preferred position(s) (G=goal, D=defence, M=mid-field, F=forward).

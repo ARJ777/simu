@@ -7,6 +7,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import aj.soccer.teams.FormationFactory;
 import aj.soccer.teams.Team;
 import aj.soccer.teams.TeamFactory;
 
@@ -15,8 +16,9 @@ import aj.soccer.teams.TeamFactory;
  */
 public class Menus implements ActionListener {
 
-	private static final String REFRESH_TEAMS = "Refresh Teams";
+	private static final String REFRESH_DATA = "Refresh Data";
 	private static final String SELECT_TEAM = "Select Team";
+	private static final String SELECT_OPPONENT_TEAM = "Select Opponent";
 
 	/** Circular reference to main GUI for call-backs. */
 	private final MenusToApp appGUI;
@@ -32,19 +34,46 @@ public class Menus implements ActionListener {
 	 */
 	public JMenuBar getMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
+		menuBar.add(getFileMenu());
+		menuBar.add(getOpponentMenu());
+		menuBar.add(getCoachMenu());
 		menuBar.add(getTeamsMenu());
+		menuBar.add(getStartMenu());
 		return menuBar;
 	}
 
-	private JMenu getTeamsMenu() {
-		JMenu teamsMenu = new JMenu("Teams");
-		JMenuItem refreshTeamsMenu = new JMenuItem(REFRESH_TEAMS);
+	private JMenu getFileMenu() {
+		JMenu menu = new JMenu("File");
+		JMenuItem refreshTeamsMenu = new JMenuItem(REFRESH_DATA);
 		refreshTeamsMenu.addActionListener(this);
-		teamsMenu.add(refreshTeamsMenu);
+		menu.add(refreshTeamsMenu);
+		return menu;
+	}
+
+	private JMenu getOpponentMenu() {
+		JMenu menu = new JMenu("Opponent Data");
+		JMenuItem selectTeamMenu = new JMenuItem(SELECT_OPPONENT_TEAM);
+		selectTeamMenu.addActionListener(this);
+		menu.add(selectTeamMenu);
+		return menu;
+	}
+
+	private JMenu getCoachMenu() {
+		JMenu menu = new JMenu("Coach's Advice");
+		return menu;
+	}
+
+	private JMenu getTeamsMenu() {
+		JMenu menu = new JMenu("Team Management");
 		JMenuItem selectTeamMenu = new JMenuItem(SELECT_TEAM);
 		selectTeamMenu.addActionListener(this);
-		teamsMenu.add(selectTeamMenu);
-		return teamsMenu;
+		menu.add(selectTeamMenu);
+		return menu;
+	}
+
+	private JMenu getStartMenu() {
+		JMenu startMenu = new JMenu("Start Game");
+		return startMenu;
 	}
 
 	@Override
@@ -54,8 +83,12 @@ public class Menus implements ActionListener {
 		if (command == SELECT_TEAM) {
 			Team team = appGUI.selectOne("Select a team", TeamFactory.getTeams());
 			appGUI.setTeam(team);
-		} else if (command == REFRESH_TEAMS) {
+		} else if (command == REFRESH_DATA) {
 			TeamFactory.refreshTeams();
+			FormationFactory.refreshFormations();
+		} else if (command == SELECT_OPPONENT_TEAM) {
+			Team team = appGUI.selectOne("Select a team", TeamFactory.getTeams());
+			appGUI.setOpponentTeam(team);
 		}
 	}
 

@@ -12,7 +12,7 @@ import aj.soccer.images.ImageFactory;
  */
 public class Display {
 
-	private static final String BACKGROUND_IMG_PATH = "Soccer-pitch.jpg";
+	private static final String BACKGROUND_IMG_PATH = "Soccer-pitch-horiz.jpg";
 	private final JPanel panel;
 	/** Circular reference to main GUI for call-backs. */
 	private final DisplayToApp appGUI;
