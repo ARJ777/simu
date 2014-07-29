@@ -8,9 +8,9 @@ import java.util.Map;
 
 public class AssignmentFactory {
 
-	private static class Counter {
+	private static class Constraints {
 
-		public Counter(Formation formation) {
+		public Constraints(Formation formation) {
 			// TODO Auto-generated constructor stub
 		}
 
@@ -19,9 +19,19 @@ public class AssignmentFactory {
 			return false;
 		}
 
-		public int total() {
+		public int numAvailable() {
 			// TODO Auto-generated method stub
 			return 0;
+		}
+
+		public void give(Position position) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public boolean isFull(Position position) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 
 	}
@@ -36,26 +46,26 @@ public class AssignmentFactory {
 	 * @return A map from player to position for each selected player.
 	 */
 	public Map<Player, Position> assignPlayerPositions(Formation formation, List<Player> players) {
-		// Counts of unfilled slots for each position.
-		Counter counter = new Counter(formation);
-		// Ambiguous, pre-selected players.
-		List<Player> activePlayers = new ArrayList<>();
-		// Unselected players.
-		List<Player> inactivePlayers = new ArrayList<>();
-		Map<Player, Position> assignedPlayers = assignUnambiguousActivePositions(counter, players, activePlayers, inactivePlayers);
+		Constraints counter = new Constraints(formation);
+		// Assign active players with unambiguous positions.
+		List<Player> activePlayers = new ArrayList<>();   // Ambiguous, pre-selected players.
+		List<Player> inactivePlayers = new ArrayList<>(); // Currently unselected players.
+		Map<Player, Position> assignments = assignUnambiguousActivePositions(counter, players, activePlayers, inactivePlayers);
 		// Calculate how many assignments still need to be made.
 		final int numActive = activePlayers.size();
-		final int numInactive = counter.total() - numActive;
-		if (numActive == 0 && numInactive == 0) return assignedPlayers;
+		final int numInactive = counter.numAvailable() - numActive;
+		if (numActive == 0 && numInactive == 0) return assignments;
 		// Resolve ambiguity.
 		int startPos = 0;
 		while (true) {
+			// Assign active players with ambiguous positions.
 			if (numActive > 0 &&
-					!assignAmbigousActivePositions(assignedPlayers, counter, activePlayers, startPos))
+					!assignAmbigousActivePositions(assignments, counter, activePlayers, startPos))
 				return null; // Failure.
+			// Assign inactive players.
 			if (numInactive == 0
-					|| assignInactivePositions(assignedPlayers, counter, inactivePlayers, numInactive))
-				return assignedPlayers; // Success.
+					|| assignInactivePositions(assignments, counter, inactivePlayers, numInactive))
+				return assignments; // Success.
 			// Backtrack to last ambiguous, active player.
 			if (numActive == 0) return null; // Failure.
 			startPos = numActive - 1;
@@ -63,7 +73,7 @@ public class AssignmentFactory {
 	}
 
 	private Map<Player, Position> assignUnambiguousActivePositions(
-			Counter counter, List<Player> players, 
+			Constraints counter, List<Player> players, 
 			List<Player> activePlayers, List<Player> inactivePlayers)
 			{
 		Map<Player, Position> assignedPlayers = new HashMap<>();
@@ -92,32 +102,35 @@ public class AssignmentFactory {
 
 	// Disambiguate all unassigned, active players.
 	private boolean assignAmbigousActivePositions(
-			Map<Player, Position> assignedPlayers,
-			Counter counter, List<Player> activePlayers,
-			int lastPos) 
+			Map<Player, Position> assignments,
+			Constraints counter, List<Player> activePlayers,
+			final int lastPos) 
 	{
 		final int length = activePlayers.size();
 		int pos = lastPos;
-		while (pos < length) {
-			Player player = activePlayers.get(pos);
+		Player player = activePlayers.get(pos);
+		while (true) {
 			Position position = disambiguatePosition(
-					counter, player.getAllowedPositions(), assignedPlayers.get(player));
-			assignedPlayers.put(player, position);
+					counter, player.getAllowedPositions(), assignments.get(player));
+			assignments.put(player, position);
 			if (position != null) {
+				if (!counter.take(position))
+					throw new IllegalStateException("Could not take a non-filled position");
 				// Move forward to next player.
-				pos++;
+				if (++pos >= length) return true; // Success.
+				player = activePlayers.get(pos);
 			} else {
 				// Backtrack to previous player.
-				pos--;
-				if (pos < 0) return false; // Failure.
+				if (--pos < 0) return false; // Failure.
+				player = activePlayers.get(pos);
+				counter.give(assignments.get(player));
 			}
 		}
-		return true;
 	}
 
-	// Finds the next position in the player's list that is feasible.
+	// Finds the next position in the player's list that is feasible - but does not take it.
 	private Position disambiguatePosition(
-			Counter counter,
+			Constraints counter,
 			List<Position> allowedPositions, Position lastPosition) 
 	{
 		Iterator<Position> iter = allowedPositions.iterator();
@@ -131,7 +144,7 @@ public class AssignmentFactory {
 		// Find next feasible position.
 		while (iter.hasNext()) {
 			Position position = iter.next();
-			if (counter.take(position))
+			if (!counter.isFull(position))
 				return position;
 		}
 		return null;
@@ -139,7 +152,7 @@ public class AssignmentFactory {
 
 	// Assign the given number of inactive players to the remaining positions.
 	private boolean assignInactivePositions(
-			Map<Player, Position> assignedPlayers, Counter counter,
+			Map<Player, Position> assignedPlayers, Constraints counter,
 			List<Player> inactivePlayers, int numInactive) {
 		// TODO Auto-generated method stub
 		return false;
