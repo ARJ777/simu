@@ -1,4 +1,4 @@
-package aj.soccer.teams;
+package aj.soccer.data;
 
 /**
  * Specifies horizontal and vertical coordinates, relative to the

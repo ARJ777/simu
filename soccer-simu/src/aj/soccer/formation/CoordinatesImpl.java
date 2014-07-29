@@ -1,4 +1,6 @@
-package aj.soccer.teams;
+package aj.soccer.formation;
+
+import aj.soccer.data.Coordinates;
 
 /*package-private*/ class CoordinatesImpl implements Coordinates {
 

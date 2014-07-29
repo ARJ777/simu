@@ -1,4 +1,4 @@
-package aj.soccer.teams;
+package aj.soccer.data;
 
 /**
  * Specifies the types of position a player may fill on the team.

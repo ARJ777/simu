@@ -1,4 +1,4 @@
-package aj.soccer.teams;
+package aj.soccer.team;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,6 +8,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import aj.soccer.data.Formation;
+import aj.soccer.data.Player;
+import aj.soccer.data.Position;
+import aj.soccer.data.Team;
+import aj.soccer.formation.FormationFactory;
 
 /**
  * Provides a means for loading teams from file.
@@ -24,9 +30,10 @@ public abstract class TeamFactory {
 	private static final int IMAGE_NUMBER_FIELD_INDEX = 1;
 	private static final int JERSEY_NUMBER_FIELD_INDEX = 2;
 	private static final int POSITIONS_FIELD_INDEX = 3;
+	private static final int MAX_ASSIGNMENT_ATTEMPTS = 20;
 
 	private static List<Team> teams = null;
-	
+
 	private TeamFactory() {}
 
 	private static String toFileName(String teamName) {
@@ -66,9 +73,13 @@ public abstract class TeamFactory {
 	 */
 	public static List<Team> getTeams() {
 		if (teams == null) {
-			teams = new ArrayList<>();
-			for (String teamName : getTeamNames())
-				teams.add(loadTeam(teamName));
+			ArrayList<Team> _teams = new ArrayList<>();
+			for (String teamName : getTeamNames()) {
+				Team team = loadTeam(teamName);
+				selectPlayers(team, team.getFormation());
+				teams.add(team);
+			}
+			teams = _teams;
 		}
 		return teams;
 	}
@@ -80,7 +91,7 @@ public abstract class TeamFactory {
 	public static void refreshTeams() {
 		teams = null;
 	}
-	
+
 	private static Team loadTeam(final String teamName, File teamFile) {
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(teamFile)))) {
 			return parseTeam(teamName, br);
@@ -121,21 +132,36 @@ public abstract class TeamFactory {
 	}
 
 	/**
-	 * Automatically selects a field of players. 
+	 * Deselects all players on the team, and marks them as inactive but selectable.
 	 * 
-	 * @param team - The team.
+	 * @param team - The team of all players.
 	 */
-	public static void autoSelectPlayers(Team team/*,Formation formation*/) {
-		clearPlayers(team);
-		//choosePlayers();
-		//assignPlayers();
-	}
-
-	private static void clearPlayers(Team team) {
-		for (Player player : team.getPlayers()) {
+	public static void deselectPlayers(Team team) {
+		final List<Player> allPlayers = team.getPlayers();
+		for (Player player : allPlayers) {
 			player.setActive(false);
-			player.setPosition(null);
+			player.setSelectable(true);
 		}
+		FormationFactory.deselectPlayers(allPlayers);
+	}
+	
+	/**
+	 * Automatically selects a group of on-field players and assigns them to their 
+	 * positions in the formation.
+	 * <p/>Players who are already active will be reselected, and players
+	 * who are unselectable will never be selected. If necessary, additional players
+	 * who are inactive but selectable will also be selected.  
+	 * 
+	 * @param team - The team of all possible players.
+	 * @param formation - The on-field formation.
+	 * @throws IllegalStateException If the team cannot be assigned to the formation. 
+	 */
+	public static void selectPlayers(Team team, Formation formation) {
+		final List<Player> allPlayers = team.getPlayers();
+		List<Player> selectedPlayers = FormationFactory.selectPlayers(allPlayers, formation);
+		if (selectedPlayers == null)
+			throw new IllegalStateException("Could not assign " + team + " to the formation " + formation);
+		for (Player player: selectedPlayers) player.setActive(true);
 	}
 
 	private static Player parsePlayer(String line) {

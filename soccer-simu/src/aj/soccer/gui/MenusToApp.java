@@ -2,7 +2,7 @@ package aj.soccer.gui;
 
 import java.util.List;
 
-import aj.soccer.teams.Team;
+import aj.soccer.data.Team;
 
 /**
  * Specifies the interface for call-backs to the main application from the menu component.

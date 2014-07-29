@@ -1,4 +1,4 @@
-package aj.soccer.teams;
+package aj.soccer.data;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public interface Player {
 	void setPosition(Position position);
 
 	/**
-	 * Indicates whether or not the player is actively selected, e.g. on the field.
+	 * Indicates whether or not the player is actively selected on the field.
 	 * 
 	 * @return A value of true (or false) if the player is (or is not) active.
 	 */
@@ -49,4 +49,19 @@ public interface Player {
 	 * @param flag - A value of true (or false) if the player is (or is not) active.
 	 */
 	void setActive(boolean flag);
+
+	/**
+	 * Indicates whether or not the player may be selected to play on the field.
+	 * 
+	 * @return A value of true (or false) if the player may (or may not) become active.
+	 */
+	boolean isSelectable();
+
+	/**
+	 * Sets the selectability status of the player to the specified value.
+	 * 
+	 * @param flag - A value of true (or false) if the player may (or may not) become active.
+	 */
+	void setSelectable(boolean flag);
+
 }

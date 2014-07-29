@@ -8,7 +8,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
-import aj.soccer.teams.Team;
+import aj.soccer.data.Team;
 
 /**
  * Provides the GUI for the application.
@@ -51,15 +51,17 @@ public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp, Unc
 	}
 
 	public void setTeam(Team team) {
-		if (this.team != null) undrawTeam(this.team);
-		this.team = team;
-		drawTeam(team);
+		this.team = _setTeam(this.team, team);
+	}
+
+	private Team _setTeam(Team oldTeam, Team newTeam) {
+		if (oldTeam != null) undrawTeam(oldTeam);
+		if (newTeam != null) drawTeam(newTeam);
+		return newTeam;
 	}
 
 	public void setOpponentTeam(Team team) {
-		if (this.opponent != null) undrawTeam(this.opponent);
-		this.opponent = team;
-		drawTeam(team);
+		this.opponent = _setTeam(this.opponent, team);
 	}
 
 	private void drawTeam(Team team) {

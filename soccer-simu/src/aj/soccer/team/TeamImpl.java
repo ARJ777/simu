@@ -1,7 +1,11 @@
-package aj.soccer.teams;
+package aj.soccer.team;
 
 import java.util.Collections;
 import java.util.List;
+
+import aj.soccer.data.Formation;
+import aj.soccer.data.Player;
+import aj.soccer.data.Team;
 
 /*package-private*/ class TeamImpl implements Team {
 
@@ -31,10 +35,12 @@ import java.util.List;
 		return teamName;
 	}
 
+	@Override
 	public Formation getFormation() {
 		return formation;
 	}
 
+	@Override
 	public void setFormation(Formation formation) {
 		this.formation = formation;
 	}

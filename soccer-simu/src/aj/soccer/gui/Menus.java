@@ -7,9 +7,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import aj.soccer.teams.FormationFactory;
-import aj.soccer.teams.Team;
-import aj.soccer.teams.TeamFactory;
+import aj.soccer.data.Team;
+import aj.soccer.formation.FormationFactory;
+import aj.soccer.team.TeamFactory;
 
 /**
  * Encapsulates the application menus.

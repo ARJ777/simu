@@ -1,4 +1,4 @@
-package aj.soccer.teams;
+package aj.soccer.data;
 
 import java.util.List;
 
@@ -20,5 +20,19 @@ public interface Team {
 	 * @return The list of players.
 	 */
 	public List<Player> getPlayers();
+
+	/**
+	 * Obtains the initial team formation.
+	 * 
+	 * @return The overall formation.
+	 */
+	public Formation getFormation();
+	
+	/**
+	 * Sets the initial team formation.
+	 * 
+	 * @param formation - The overall formation.
+	 */
+	public void setFormation(Formation formation);
 
 }

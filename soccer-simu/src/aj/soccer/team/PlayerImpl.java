@@ -1,13 +1,17 @@
-package aj.soccer.teams;
+package aj.soccer.team;
 
 import java.util.Collections;
 import java.util.List;
+
+import aj.soccer.data.Player;
+import aj.soccer.data.Position;
 
 /*package-private*/ class PlayerImpl implements Player {
 
 	private final String playerName;
 	private final List<Position> allowedPositions;
 	private boolean isActive = false;
+	private boolean isSelectable = true;
 	private Position position = null;
 
 	/*package-private*/ PlayerImpl(String playerName, List<Position> allowedPositions) {
@@ -50,6 +54,16 @@ import java.util.List;
 	@Override
 	public void setPosition(Position position) {
 		this.position = position;
+	}
+
+	@Override
+	public boolean isSelectable() {
+		return isSelectable;
+	}
+
+	@Override
+	public void setSelectable(boolean flag) {
+		isSelectable = flag;
 	}
 
 }

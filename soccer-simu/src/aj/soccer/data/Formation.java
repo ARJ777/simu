@@ -1,4 +1,4 @@
-package aj.soccer.teams;
+package aj.soccer.data;
 
 import java.util.List;
 
