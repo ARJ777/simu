@@ -36,11 +36,11 @@ import aj.soccer.formation.FormationFactory;
 		int i = 0;
 		while (constraints.totalCapacity() > 0) {
 			Position position = generatePosition(constraints);
-			_players.add(new UnambiguousPlayer("Player" + i, position));
+			_players.add(new UnambiguousPlayer("Player" + (++i), position));
 		}
 		while (i < teamSize) {
 			Position position = generatePosition();
-			_players.add(new UnambiguousPlayer("Player" + i, position));
+			_players.add(new UnambiguousPlayer("Player" + (++i), position));
 		}
 		players = Collections.unmodifiableList(_players);
 	}
