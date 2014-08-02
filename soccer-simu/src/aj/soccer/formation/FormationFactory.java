@@ -7,11 +7,14 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import aj.soccer.data.Constraints;
 import aj.soccer.data.Coordinates;
@@ -150,7 +153,7 @@ public class FormationFactory {
 	public static void deselectPlayers(List<Player> players) {
 		for (Player player : players) {
 			player.setPosition(null);
-			//TODO player.setLocation(null);
+			player.setLocation(null);
 		}
 	}
 
@@ -170,88 +173,34 @@ public class FormationFactory {
 	 */
 	public static /*@Nullable*/ List<Player> selectPlayers(
 			List<Player> allPlayers, Formation formation) 
-			{
-		Counter counter = new Counter(formation);
-		List<Player> selectedPlayers = assignActivePlayers(counter, allPlayers);
-
-		return selectedPlayers;
-			}
-
-	// Active players must be reselected; return null if not possible.
-	private static /*@Nullable*/ List<Player> assignActivePlayers(Counter counter, List<Player> allPlayers) {
-		List<Player> activePlayers = new ArrayList<>();
-		List<Player> ambiguousPlayers = new ArrayList<>();
+	{
+		Map<Player, Position> selectedPlayers = 
+				AssignmentFactory.assignPlayerPositions(
+						getConstraints(formation), allPlayers);
+		if (selectedPlayers == null) return null;
+		Map<Position, List<Coordinates>> posLocations = getLocations(formation);
+		List<Player> players = new LinkedList<>();
 		for (Player player : allPlayers) {
-			if (!player.isActive()) continue;
-			Position position = assignPosition(counter, player);
-			if (position == null) {
-				ambiguousPlayers.add(player);
-			} else {
-				if (!counter.take(position)) return null;
-				activePlayers.add(player);
-			}
+			Position position = selectedPlayers.get(player);
+			if (position == null) continue;
+			player.setPosition(position);
+			List<Coordinates> locations = posLocations.get(position);
+			Coordinates location = locations.remove(0);
+			player.setLocation(location);
+			players.add(player);
 		}
-		if (activePlayers.size() + ambiguousPlayers.size() > NUM_POSITIONS) return null;
-		// Attempt to resolve ambiguity.
-		return activePlayers;
+		return players;
 	}
 
-	// Assigns unique position if possible, or no position otherwise.
-	private static /*@Nullable*/ Position assignPosition(Counter counter, Player player) {
-		Position position = player.getPosition();
-		if (position != null) return position;  // Already assigned.
-		List<Position> possiblePositions = player.getAllowedPositions();
-		if (possiblePositions.size() == 1) { // Only one possible.
-			position = possiblePositions.get(0);
-			player.setPosition(position);
-			return position;
-		}
-		// Check which possible positions are still available.
-		int numFillable = 0;
-		for (Position aPosition : possiblePositions) {
-			if (!counter.isFull(aPosition)) numFillable++;
-		}
-		if (numFillable == 1) { // Only one possible.
-			position = possiblePositions.get(0);
-			player.setPosition(position);
-			return position;
-		}
-		return null;
-	}
-
-	//**************************************************
-	// Holds the numbers of positions still to be filled.
-	private static class Counter {
-
-		private final int[] counts = new int[Position.values().length];
-		private int total = 0;
-
-		private Counter(Formation formation) {
-			counts[Position.GoalKeeper.ordinal()] = 1;
-			counts[Position.Defender.ordinal()] = formation.getDefenders().size();
-			counts[Position.MidFielder.ordinal()] = formation.getMidFielders().size();
-			counts[Position.Forward.ordinal()] = formation.getForwards().size();
-			for (int count : counts) total += count;
-		}
-
-		public boolean isFull(Position position) {
-			return counts[position.ordinal()] <= 0;
-		}
-
-		// Consume known position. Return false before taking position if full.
-		private boolean take(Position position) {
-			if (isFull(position)) return false;
-			counts[position.ordinal()]--;
-			total--; 
-			return true;
-		}
-
-		private boolean isSatisfied() {
-			for (int count : counts) {
-				if (count != 0) return false;
-			}
-			return (total == 0);
-		}
+	private static Map<Position, List<Coordinates>> getLocations(Formation formation) {
+		Map<Position, List<Coordinates>> map = new HashMap<>();
+		List<Coordinates> goalKeeper = new LinkedList<>();
+		goalKeeper.add(formation.getGoalKeeper());
+		map.put(Position.GoalKeeper, goalKeeper);
+		map.put(Position.Defender, new LinkedList<>(formation.getDefenders()));
+		map.put(Position.MidFielder, new LinkedList<>(formation.getMidFielders()));
+		map.put(Position.Forward, new LinkedList<>(formation.getForwards()));
+		return map;
 	}
 
 	public static Constraints<Position> getConstraints(Formation formation) {

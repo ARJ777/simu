@@ -3,6 +3,7 @@ package aj.soccer.team;
 import java.util.Collections;
 import java.util.List;
 
+import aj.soccer.data.Coordinates;
 import aj.soccer.data.Player;
 import aj.soccer.data.Position;
 
@@ -13,6 +14,7 @@ import aj.soccer.data.Position;
 	private boolean isActive = false;
 	private boolean isSelectable = true;
 	private Position position = null;
+	private Coordinates location = null;
 
 	/*package-private*/ PlayerImpl(String playerName, List<Position> allowedPositions) {
 		this.playerName = playerName;
@@ -64,6 +66,16 @@ import aj.soccer.data.Position;
 	@Override
 	public void setSelectable(boolean flag) {
 		isSelectable = flag;
+	}
+
+	@Override
+	public Coordinates getLocation() {
+		return location;
+	}
+
+	@Override
+	public void setLocation(Coordinates loc) {
+		location = loc;
 	}
 
 }

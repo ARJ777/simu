@@ -77,7 +77,7 @@ public abstract class TeamFactory {
 			for (String teamName : getTeamNames()) {
 				Team team = loadTeam(teamName);
 				selectPlayers(team, team.getFormation());
-				teams.add(team);
+				_teams.add(team);
 			}
 			teams = _teams;
 		}
@@ -157,8 +157,8 @@ public abstract class TeamFactory {
 	 * @throws IllegalStateException If the team cannot be assigned to the formation. 
 	 */
 	public static void selectPlayers(Team team, Formation formation) {
-		final List<Player> allPlayers = team.getPlayers();
-		List<Player> selectedPlayers = FormationFactory.selectPlayers(allPlayers, formation);
+		List<Player> selectedPlayers = FormationFactory.selectPlayers(
+				team.getPlayers(), formation);
 		if (selectedPlayers == null)
 			throw new IllegalStateException("Could not assign " + team + " to the formation " + formation);
 		for (Player player: selectedPlayers) player.setActive(true);

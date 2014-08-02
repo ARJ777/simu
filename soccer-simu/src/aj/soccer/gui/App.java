@@ -76,6 +76,6 @@ public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp, Unc
 
 	@Override
 	public void uncaughtException(Thread thread, Throwable e) {
-		displayError("Exception", e.getMessage());
+		displayError("Exception", e.toString());
 	}
 }

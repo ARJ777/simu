@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import aj.soccer.data.Coordinates;
 import aj.soccer.data.Player;
 import aj.soccer.data.Position;
 
@@ -16,13 +17,13 @@ import aj.soccer.data.Position;
 	private final List<Position> positions; 
 	private Position position = null;
 	private boolean isActive = false;
+	private Coordinates location = null;
 	
 	/*package-private*/ public UnambiguousPlayer(
 			String name, Position position) 
 	{
 		this.name = name;
-		List<Position> _positions = Arrays.asList(position);
-		positions = Collections.unmodifiableList(_positions);
+		positions = Collections.unmodifiableList(Arrays.asList(position));
 	}
 	
 	@Override
@@ -62,5 +63,15 @@ import aj.soccer.data.Position;
 
 	@Override
 	public void setSelectable(boolean flag) {}
+
+	@Override
+	public Coordinates getLocation() {
+		return location;
+	}
+
+	@Override
+	public void setLocation(Coordinates loc) {
+		this.location = loc;
+	}
 
 }

@@ -64,4 +64,18 @@ public interface Player {
 	 */
 	void setSelectable(boolean flag);
 
+	/**
+	 * Obtains the player's current location.
+	 * 
+	 * @return The location.
+	 */
+	Coordinates getLocation();
+
+	/**
+	 * Sets the player's current location.
+	 * 
+	 * @param loc - The location.
+	 */
+	void setLocation(Coordinates loc);
+
 }
