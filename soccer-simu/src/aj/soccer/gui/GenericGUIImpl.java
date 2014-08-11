@@ -1,13 +1,18 @@
 package aj.soccer.gui;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -58,5 +63,52 @@ public class GenericGUIImpl implements GenericGUI {
 		text.setText(message);
 		JOptionPane.showMessageDialog(frame, new JScrollPane(text), title, JOptionPane.ERROR_MESSAGE);
 	}
+
+    public void resizeFonts(int fontSizeChange, Component... roots) {
+    	resizeFonts(fontSizeChange, Arrays.asList(roots));
+    }
+    
+    public void resizeFonts(int fontSizeChange, List<Component> roots) {
+        LinkedList<Component> components = new LinkedList<>(roots);
+        LinkedList<Container> containers = new LinkedList<>();
+        while (!components.isEmpty()) {
+            Component component = components.removeLast();
+            component.setFont(resizeFont(component.getFont(), fontSizeChange));
+            if (component instanceof Container) {
+                Container container = (Container) component;
+                List<Component> children =
+                    (container instanceof JMenu)
+                        ? getMenuItems((JMenu) container)
+                        : Arrays.asList(container.getComponents());
+                components.addAll(children);
+                containers.add(container);
+            } else {
+                component.repaint();
+            }
+        }
+        while (!containers.isEmpty()) {
+            Container container = containers.removeLast();
+            container.repaint();
+        }
+        for (Component root : roots)
+        	root.repaint();
+    }
+
+    private static Font resizeFont(Font font, int fontSizeChange) {
+        Font newFont = font.deriveFont(font.getStyle(), font.getSize() + fontSizeChange);
+        return newFont;
+    }
+
+    private List<Component> getMenuItems(JMenu menu) {
+        final int itemCount = menu.getItemCount();
+        List<Component> items = new ArrayList<>(itemCount);
+        for (int i = 0; i < itemCount; i++) {
+            JMenuItem item = menu.getItem(i);
+            if (item != null) {
+                items.add(item);
+            }
+        }
+        return items;
+    }
 
 }

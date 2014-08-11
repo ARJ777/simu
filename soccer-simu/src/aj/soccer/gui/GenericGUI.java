@@ -1,6 +1,5 @@
 package aj.soccer.gui;
 
-import java.util.Collection;
 import java.util.List;
 
 /**

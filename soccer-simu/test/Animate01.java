@@ -50,7 +50,7 @@ public class Animate01 extends Frame
     // image
     backGroundImage = 
         Toolkit.getDefaultToolkit().
-          getImage("background02.gif");
+          getImage("images/Soccer-pitch-horiz.jpg");
     mediaTracker.addImage(
                    backGroundImage, 0);
     
@@ -58,32 +58,32 @@ public class Animate01 extends Frame
     // for sprites
     gifImages[0] = 
            Toolkit.getDefaultToolkit().
-               getImage("redball.gif");
+               getImage("images/Players/Player1.jpg");
     mediaTracker.addImage(
                       gifImages[0], 0);
     gifImages[1] = 
            Toolkit.getDefaultToolkit().
-             getImage("greenball.gif");
+           getImage("images/Players/Player2.jpg");
     mediaTracker.addImage(
                       gifImages[1], 0);
     gifImages[2] = 
            Toolkit.getDefaultToolkit().
-              getImage("blueball.gif");
+           getImage("images/Players/Player1.jpg");
     mediaTracker.addImage(
                       gifImages[2], 0);
     gifImages[3] = 
            Toolkit.getDefaultToolkit().
-            getImage("yellowball.gif");
+           getImage("images/Players/Player2.jpg");
     mediaTracker.addImage(
                       gifImages[3], 0);
     gifImages[4] = 
            Toolkit.getDefaultToolkit().
-            getImage("purpleball.gif");
+           getImage("images/Players/Player1.jpg");
     mediaTracker.addImage(
                       gifImages[4], 0);
     gifImages[5] = 
            Toolkit.getDefaultToolkit().
-            getImage("orangeball.gif");
+           getImage("images/Players/Player2.jpg");
     mediaTracker.addImage(
                       gifImages[5], 0);
     
