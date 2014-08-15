@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
 import aj.soccer.data.Constraints;
 import aj.soccer.data.Formation;
 import aj.soccer.data.Player;
@@ -19,66 +18,76 @@ import aj.soccer.formation.FormationFactory;
  */
 /*package-private*/ class UnambiguousTeam implements Team {
 
-	private static final Random generator = new Random();
-	
-	private final String name;
-	private final Formation formation;
-	private final List<Player> players;
-	
-	/*package-private*/ UnambiguousTeam(String name, Formation formation, final int teamSize) {
-		this.name = name;
-		this.formation = formation;
-		Constraints<Position> constraints =
-				FormationFactory.getConstraints(formation);
-		if (teamSize < constraints.totalCapacity())
-			throw new IllegalArgumentException("Too few players");
-		List<Player> _players = new ArrayList<>(teamSize);
-		int i = 0;
-		while (constraints.totalCapacity() > 0) {
-			Position position = generatePosition(constraints);
-			_players.add(new UnambiguousPlayer("Player" + (++i), position));
-		}
-		while (i < teamSize) {
-			Position position = generatePosition();
-			_players.add(new UnambiguousPlayer("Player" + (++i), position));
-		}
-		players = Collections.unmodifiableList(_players);
-	}
-	
-	private static final int NUM_POSITIONS = Position.values().length;
+    private static final Random generator = new Random();
 
-	private Position generatePosition(Constraints<Position> constraints) {
-		while (true) {
-			int idx = generator.nextInt(NUM_POSITIONS);
-			Position position = Position.values()[idx];
-			if (constraints.decrement(position))
-				return position;
-		}
-	}
+    private final String name;
+    private final Formation formation;
+    private final List<Player> players;
 
-	private Position generatePosition() {
-		while (true) {
-			int idx = generator.nextInt(NUM_POSITIONS);
-			Position position = Position.values()[idx];
-		}
+    /*package-private*/ UnambiguousTeam(String name, Formation formation, final int teamSize) {
+	this.name = name;
+	this.formation = formation;
+	Constraints<Position> constraints =
+		FormationFactory.getConstraints(formation);
+	if (teamSize < constraints.totalCapacity()) {
+	    throw new IllegalArgumentException("Too few players");
 	}
-
-	@Override
-	public String getName() {
-		return name;
+	List<Player> _players = new ArrayList<>(teamSize);
+	int i = 0;
+	while (constraints.totalCapacity() > 0) {
+	    Position position = generatePosition(constraints);
+	    _players.add(new UnambiguousPlayer("Player" + (++i), position));
 	}
-
-	@Override
-	public List<Player> getPlayers() {
-		return players;
+	while (i < teamSize) {
+	    Position position = generatePosition();
+	    _players.add(new UnambiguousPlayer("Player" + (++i), position));
 	}
+	players = Collections.unmodifiableList(_players);
+    }
 
-	@Override
-	public Formation getFormation() {
-		return formation;
+    private static final int NUM_POSITIONS = Position.values().length;
+
+    private Position generatePosition(Constraints<Position> constraints) {
+	while (true) {
+	    int idx = generator.nextInt(NUM_POSITIONS);
+	    Position position = Position.values()[idx];
+	    if (constraints.decrement(position)) {
+		return position;
+	    }
 	}
+    }
 
-	@Override
-	public void setFormation(Formation formation) {}
+    private Position generatePosition() {
+	return Position.values()[generator.nextInt(NUM_POSITIONS)];
+    }
+
+    @Override
+    public String getName() {
+	return name;
+    }
+
+    @Override
+    public List<Player> getPlayers() {
+	return players;
+    }
+
+    @Override
+    public Formation getFormation() {
+	return formation;
+    }
+
+    @Override
+    public void setFormation(Formation formation) {}
+
+    @Override
+    public List<Player> getActivePlayers() {
+	List<Player> activePlayers = new ArrayList<>();
+	for (Player player : players) {
+	    if (player.isActive()) {
+		activePlayers.add(player);
+	    }
+	}
+	return activePlayers;
+    }
 
 }

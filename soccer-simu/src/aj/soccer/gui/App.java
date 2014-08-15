@@ -1,13 +1,11 @@
 package aj.soccer.gui;
 
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.List;
-
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-
+import aj.soccer.data.Player;
 import aj.soccer.data.Team;
 
 /**
@@ -15,67 +13,75 @@ import aj.soccer.data.Team;
  */
 public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp, UncaughtExceptionHandler {
 
-	private Display display;
-	private Team team = null;
-	private Team opponent = null;
+    private Display display;
+    private Team team = null;
+    private Team opponent = null;
 
-	public App() {
-		setLookAndFeel();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("AJ's Soccer Simulator");
-		//setIconImage(ImageFactory.loadImageIcon(ICON_IMAGE_PATH));
-	}
+    public App() {
+	setLookAndFeel();
+	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	frame.setTitle("AJ's Soccer Simulator");
+	//setIconImage(ImageFactory.loadImageIcon(ICON_IMAGE_PATH));
+    }
 
-	private static void setLookAndFeel() {
-		try {
-			UIManager.setLookAndFeel(new NimbusLookAndFeel());
-		} catch (UnsupportedLookAndFeelException e) {
-			try {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			} catch (ClassNotFoundException | InstantiationException
-					| IllegalAccessException | UnsupportedLookAndFeelException e1) {
-				throw new IllegalStateException(e1);
-			}
-		}
+    private static void setLookAndFeel() {
+	try {
+	    UIManager.setLookAndFeel(new NimbusLookAndFeel());
+	} catch (UnsupportedLookAndFeelException e) {
+	    try {
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	    } catch (ClassNotFoundException | InstantiationException
+		    | IllegalAccessException | UnsupportedLookAndFeelException e1) {
+		throw new IllegalStateException(e1);
+	    }
 	}
+    }
 
-	public void display() {
-		Thread.setDefaultUncaughtExceptionHandler(this);
-		display = new Display(this);
-		frame.add(display.getPanel());
-		Menus menuGUI = new Menus(this);
-		frame.setJMenuBar(menuGUI.getMenuBar());
-        frame.pack();
-        //setSize(250,250);
-        frame.setVisible(true);
-	}
+    public void display() {
+	Thread.setDefaultUncaughtExceptionHandler(this);
+	display = new Display(this);
+	frame.add(display.getPanel());
+	Menus menuGUI = new Menus(this);
+	frame.setJMenuBar(menuGUI.getMenuBar());
+	frame.pack();
+	//setSize(250,250);
+	frame.setVisible(true);
+    }
 
-	public void setTeam(Team team) {
-		this.team = _setTeam(this.team, team);
-	}
+    @Override
+    public void setTeam(Team team) {
+	this.team = _setTeam(this.team, team);
+    }
 
-	private Team _setTeam(Team oldTeam, Team newTeam) {
-		if (oldTeam != null) undrawTeam(oldTeam);
-		if (newTeam != null) drawTeam(newTeam);
-		return newTeam;
+    private Team _setTeam(Team oldTeam, Team newTeam) {
+	if (oldTeam != null) {
+	    undrawTeam(oldTeam);
 	}
+	if (newTeam != null) {
+	    drawTeam(newTeam);
+	}
+	return newTeam;
+    }
 
-	public void setOpponentTeam(Team team) {
-		this.opponent = _setTeam(this.opponent, team);
-	}
+    @Override
+    public void setOpponentTeam(Team team) {
+	this.opponent = _setTeam(this.opponent, team);
+    }
 
-	private void drawTeam(Team team) {
-		// TODO Auto-generated method stub
-		
+    private void drawTeam(Team team) {
+	for (Player player : team.getActivePlayers()) {
+	    display.addSprite(player.getSprite());
 	}
+    }
 
-	private void undrawTeam(Team team) {
-		// TODO Auto-generated method stub
-		
+    private void undrawTeam(Team team) {
+	for (Player player : team.getActivePlayers()) {
+	    display.removeSprite(player.getSprite());
 	}
+    }
 
-	@Override
-	public void uncaughtException(Thread thread, Throwable e) {
-		displayError("Exception", e.toString());
-	}
+    @Override
+    public void uncaughtException(Thread thread, Throwable e) {
+	displayError("Exception", e.toString());
+    }
 }
