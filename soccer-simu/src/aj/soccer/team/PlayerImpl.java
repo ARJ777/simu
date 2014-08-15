@@ -90,7 +90,27 @@ import aj.soccer.images.ImageFactory;
 	return sprite;
     }
 
+    private Image getImage() {
+	if (image == null) {
+	    image = ImageFactory.getPlayerImage(imgNum);
+	}
+	return image;
+    }
+
     //============================================================
+    private static final Coordinates OFF_SCREEN_COORDINATES = new Coordinates() {
+
+	@Override
+	public double getY() {
+	    return -1;
+	}
+
+	@Override
+	public double getX() {
+	    return -1;
+	}
+    };
+
     private class SpriteImpl implements Sprite {
 
 	@Override
@@ -100,25 +120,14 @@ import aj.soccer.images.ImageFactory;
 
 	@Override
 	public Image getImage() {
-	    if (image == null) {
-		image = loadImage();
-	    }
-	    return image;
+	    return PlayerImpl.this.getImage();
 	}
 
 	@Override
-	public double getX() {
-	    return (location == null) ? -1 : location.getX();
+	public Coordinates getLocation() {
+	    return (location == null) ? OFF_SCREEN_COORDINATES : location;
 	}
 
-	@Override
-	public double getY() {
-	    return (location == null) ? -1 : location.getY();
-	}
-    }
-
-    public Image loadImage() {
-	return ImageFactory.getPlayerImage(imgNum);
     }
 
 }

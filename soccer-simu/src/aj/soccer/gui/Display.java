@@ -1,6 +1,7 @@
 package aj.soccer.gui;
 
 import java.awt.Component;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JLabel;
@@ -22,7 +23,7 @@ public class Display implements SpriteManager {
 
     public Display(DisplayToApp appGUI) {
 	this.appGUI = appGUI;
-	panel = new JPanel();
+	panel = new DisplayPanel();
 	JLabel label = new JLabel(ImageFactory.loadImageIcon(BACKGROUND_IMG_PATH));
 	panel.add(label);
     }
@@ -40,12 +41,46 @@ public class Display implements SpriteManager {
     public void addSprite(Sprite sprite) {
 	if (!sprites.contains(sprite)) {
 	    sprites.add(sprite);
+	    drawSprite(sprite);
 	}
+    }
+
+    private void drawSprite(Sprite sprite) {
     }
 
     @Override
     public void removeSprite(Sprite sprite) {
-	sprites.remove(sprite);
+	if (sprites.remove(sprite)) {
+	    undrawSprite(sprite);
+	}
+    }
+
+    private void undrawSprite(Sprite sprite) {
+	// TODO Auto-generated method stub
+
+    }
+
+    //===============================================
+    @SuppressWarnings("serial")
+    private class DisplayPanel extends JPanel {
+
+	@Override
+	public void paintComponent(Graphics g) {
+	    super.paintComponent(g);
+	    Display.this.paintComponent(g);
+	}
+
+    }
+
+    public void paintComponent(Graphics g) {
+	for (Sprite sprite : sprites) {
+	    drawSprite(g, sprite);
+	}
+    }
+
+    private void drawSprite(Graphics g, Sprite sprite) {
+	// TODO Auto-generated method stub
+
     }
 
 }

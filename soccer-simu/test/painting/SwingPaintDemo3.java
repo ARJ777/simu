@@ -26,20 +26,20 @@ public class SwingPaintDemo3 {
 		SwingUtilities.isEventDispatchThread());
 	JFrame f = new JFrame("Swing Paint Demo");
 	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	f.add(new MyPanel());
+	f.add(new MyPanel3());
 	f.pack();
 	f.setVisible(true);
     }
 }
 
-class MyPanel extends JPanel {
+class MyPanel3 extends JPanel {
 
     private int squareX = 50;
     private int squareY = 50;
     private int squareW = 20;
     private int squareH = 20;
 
-    public MyPanel() {
+    public MyPanel3() {
 
 	setBorder(BorderFactory.createLineBorder(Color.black));
 

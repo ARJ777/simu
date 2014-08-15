@@ -11,8 +11,6 @@ public interface Sprite {
 
     Image getImage();
 
-    double getX();
-
-    double getY();
+    Coordinates getLocation();
 
 }
