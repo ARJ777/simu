@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
@@ -66,5 +67,9 @@ public abstract class ImageFactory {
 	private static Image selectPlayerImage() {
 		// TODO Randomly select an image from the directory.
 		return loadPlayerImage("1");
+	}
+
+	public static Image loadImage(String imageFile) {
+		return loadImage(new File(IMAGE_ROOT_DIR, imageFile));
 	}
 }

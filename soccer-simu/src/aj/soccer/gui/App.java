@@ -14,12 +14,15 @@ import aj.soccer.data.Formation;
 import aj.soccer.data.Player;
 import aj.soccer.data.Sprite;
 import aj.soccer.data.Team;
+import aj.soccer.images.ImageFactory;
 import aj.soccer.team.TeamFactory;
 
 /**
  * Provides the GUI for the application.
  */
 public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp, UncaughtExceptionHandler {
+
+	private static final String ICON_IMAGE_FILE = "soccer-ball.jpg";
 
 	private Display display;
 	private Team team1 = null;
@@ -31,7 +34,7 @@ public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp, Unc
 		setLookAndFeel();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("AJ's Soccer Simulator");
-		//setIconImage(ImageFactory.loadImageIcon(ICON_IMAGE_PATH));
+		frame.setIconImage(ImageFactory.loadImage(ICON_IMAGE_FILE));
 	}
 
 	private static void setLookAndFeel() {
@@ -54,7 +57,7 @@ public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp, Unc
 		Menus menuGUI = new Menus(this);
 		frame.setJMenuBar(menuGUI.getMenuBar());
 		frame.pack();
-		frame.setSize(1000,700);
+		frame.setSize(1200,700);
 		frame.setVisible(true);
 	}
 
