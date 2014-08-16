@@ -81,14 +81,16 @@ public class Menus implements ActionListener {
 		System.out.printf("Event performed: %s%n", event);
 		final String command = event.getActionCommand();
 		if (command == SELECT_TEAM) {
-			Team team = appGUI.selectOne("Select a team", TeamFactory.getTeams());
-			appGUI.setTeam(team);
+			String teamName = appGUI.selectOne("Select a team", TeamFactory.getTeamNames());
+			if (teamName != null)
+				appGUI.setTeam(TeamFactory.loadTeam(teamName));
 		} else if (command == REFRESH_DATA) {
 			TeamFactory.refreshTeams();
 			FormationFactory.refreshFormations();
 		} else if (command == SELECT_OPPONENT_TEAM) {
-			Team team = appGUI.selectOne("Select a team", TeamFactory.getTeams());
-			appGUI.setOpponentTeam(team);
+			String teamName = appGUI.selectOne("Select a team", TeamFactory.getTeamNames());
+			if (teamName != null)
+				appGUI.setOpponentTeam(TeamFactory.loadTeam(teamName));
 		}
 	}
 

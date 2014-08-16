@@ -35,138 +35,148 @@ package painting;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import aj.soccer.images.ImageFactory;
+
 public class SwingPaintDemo4 {
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 
-	SwingUtilities.invokeLater(new Runnable() {
-	    @Override
-	    public void run() {
-		createAndShowGUI();
-	    }
-	});
-    }
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				createAndShowGUI();
+			}
+		});
+	}
 
-    private static void createAndShowGUI() {
-	System.out.println("Created GUI on EDT? "+
-		SwingUtilities.isEventDispatchThread());
-	JFrame f = new JFrame("Swing Paint Demo");
-	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	f.add(new MyPanel4());
-	f.setSize(250,250);
-	f.setVisible(true);
-    }
+	private static void createAndShowGUI() {
+		System.out.println("Created GUI on EDT? "+
+				SwingUtilities.isEventDispatchThread());
+		JFrame f = new JFrame("Swing Paint Demo");
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		MyPanel4 panel = new MyPanel4();
+		f.add(panel);
+		f.setSize(250,250);
+		f.setVisible(true);
+	}
 
 }
 
 @SuppressWarnings("serial")
 class MyPanel4 extends JPanel {
 
-    RedSquare redSquare = new RedSquare();
+	private static final File BACKGROUND_IMAGE_FILE = new File("images/Soccer-pitch-horiz.jpg");
+	private static final Image BACKGROUND_IMAGE = ImageFactory.loadImage(BACKGROUND_IMAGE_FILE);
+	
+	RedSquare redSquare = new RedSquare();
 
-    public MyPanel4() {
+	public MyPanel4() {
 
-	setBorder(BorderFactory.createLineBorder(Color.black));
+		setBorder(BorderFactory.createLineBorder(Color.black));
 
-	addMouseListener(new MouseAdapter(){
-	    @Override
-	    public void mousePressed(MouseEvent e){
-		moveSquare(e.getX(),e.getY());
-	    }
-	});
+		addMouseListener(new MouseAdapter(){
+			@Override
+			public void mousePressed(MouseEvent e){
+				moveSquare(e.getX(),e.getY());
+			}
+		});
 
-	addMouseMotionListener(new MouseAdapter(){
-	    @Override
-	    public void mouseDragged(MouseEvent e){
-		moveSquare(e.getX(),e.getY());
-	    }
-	});
+		addMouseMotionListener(new MouseAdapter(){
+			@Override
+			public void mouseDragged(MouseEvent e){
+				moveSquare(e.getX(),e.getY());
+			}
+		});
 
-    }
-
-    private void moveSquare(int x, int y){
-
-	// Current square state, stored as final variables
-	// to avoid repeat invocations of the same methods.
-	final int CURR_X = redSquare.getX();
-	final int CURR_Y = redSquare.getY();
-	final int CURR_W = redSquare.getWidth();
-	final int CURR_H = redSquare.getHeight();
-	final int OFFSET = 1;
-
-	if ((CURR_X!=x) || (CURR_Y!=y)) {
-
-	    // The square is moving, repaint background
-	    // over the old square location.
-	    repaint(CURR_X,CURR_Y,CURR_W+OFFSET,CURR_H+OFFSET);
-
-	    // Update coordinates.
-	    redSquare.setX(x);
-	    redSquare.setY(y);
-
-	    // Repaint the square at the new location.
-	    repaint(redSquare.getX(), redSquare.getY(),
-		    redSquare.getWidth()+OFFSET,
-		    redSquare.getHeight()+OFFSET);
 	}
-    }
 
-    @Override
-    public Dimension getPreferredSize() {
-	return new Dimension(250,200);
-    }
+	private void moveSquare(int x, int y){
 
-    @Override
-    public void paintComponent(Graphics g) {
-	super.paintComponent(g);
-	g.drawString("This is my custom Panel!",10,20);
+		// Current square state, stored as final variables
+		// to avoid repeat invocations of the same methods.
+		final int CURR_X = redSquare.getX();
+		final int CURR_Y = redSquare.getY();
+		final int CURR_W = redSquare.getWidth();
+		final int CURR_H = redSquare.getHeight();
+		final int OFFSET = 1;
 
-	redSquare.paintSquare(g);
-    }
+		if ((CURR_X!=x) || (CURR_Y!=y)) {
+
+			// The square is moving, repaint background
+			// over the old square location.
+			repaint(CURR_X,CURR_Y,CURR_W+OFFSET,CURR_H+OFFSET);
+
+			// Update coordinates.
+			redSquare.setX(x);
+			redSquare.setY(y);
+
+			// Repaint the square at the new location.
+			repaint(redSquare.getX(), redSquare.getY(),
+					redSquare.getWidth()+OFFSET,
+					redSquare.getHeight()+OFFSET);
+		}
+	}
+
+	@Override
+	public Dimension getPreferredSize() {
+		return new Dimension(250,200);
+	}
+
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(BACKGROUND_IMAGE, 0, 0, null);
+		g.drawString("This is my custom Panel!",10,20);
+
+		redSquare.paintSquare(g);
+	}
 }
 
 class RedSquare{
 
-    private int xPos = 50;
-    private int yPos = 50;
-    private int width = 20;
-    private int height = 20;
+	private int xPos = 50;
+	private int yPos = 50;
+	private int width = 20;
+	private int height = 20;
 
-    public void setX(int xPos){
-	this.xPos = xPos;
-    }
+	public void setX(int xPos){
+		this.xPos = xPos;
+	}
 
-    public int getX(){
-	return xPos;
-    }
+	public int getX(){
+		return xPos;
+	}
 
-    public void setY(int yPos){
-	this.yPos = yPos;
-    }
+	public void setY(int yPos){
+		this.yPos = yPos;
+	}
 
-    public int getY(){
-	return yPos;
-    }
+	public int getY(){
+		return yPos;
+	}
 
-    public int getWidth(){
-	return width;
-    }
+	public int getWidth(){
+		return width;
+	}
 
-    public int getHeight(){
-	return height;
-    }
+	public int getHeight(){
+		return height;
+	}
 
-    public void paintSquare(Graphics g){
-	g.setColor(Color.RED);
-	g.fillRect(xPos,yPos,width,height);
-	g.setColor(Color.BLACK);
-	g.drawRect(xPos,yPos,width,height);
-    }
+	public void paintSquare(Graphics g){
+		g.setColor(Color.RED);
+		g.fillRect(xPos,yPos,width,height);
+		g.setColor(Color.BLACK);
+		g.drawRect(xPos,yPos,width,height);
+	}
 }

@@ -9,9 +9,12 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
+import aj.soccer.data.Coordinates;
+import aj.soccer.data.Formation;
 import aj.soccer.data.Player;
 import aj.soccer.data.Sprite;
 import aj.soccer.data.Team;
+import aj.soccer.team.TeamFactory;
 
 /**
  * Provides the GUI for the application.
@@ -19,8 +22,10 @@ import aj.soccer.data.Team;
 public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp, UncaughtExceptionHandler {
 
 	private Display display;
-	private Team team = null;
-	private Team opponent = null;
+	private Team team1 = null;
+	private Formation formation1 = null;
+	private Team team2 = null;
+	private Formation formation2 = null;
 
 	public App() {
 		setLookAndFeel();
@@ -55,22 +60,52 @@ public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp, Unc
 
 	@Override
 	public void setTeam(Team team) {
-		this.team = _setTeam(this.team, team);
-	}
-
-	private Team _setTeam(Team oldTeam, Team newTeam) {
-		if (oldTeam != null) {
-			undrawTeam(oldTeam);
+		if (team1 != null)
+			undrawTeam(team1);
+		team1 = team;
+		if (team != null) {
+			formation1 = team.getFormation();
+			TeamFactory.selectPlayers(team, formation1);
+			drawTeam(team);
+		} else {
+			formation1 = null;
 		}
-		if (newTeam != null) {
-			drawTeam(newTeam);
-		}
-		return newTeam;
 	}
 
 	@Override
 	public void setOpponentTeam(Team team) {
-		this.opponent = _setTeam(this.opponent, team);
+		if (team2 != null)
+			undrawTeam(team2);
+		team2 = team;
+		if (team != null) {
+			formation2 = team.getFormation();
+			TeamFactory.selectPlayers(team, formation2);
+			reverseLocations(team.getActivePlayers());
+			drawTeam(team);
+		} else {
+			formation2 = null;
+		}
+	}
+
+	private void reverseLocations(List<Player> activePlayers) {
+		for (Player player : activePlayers) {
+			Coordinates location = player.getLocation();
+			if (location == null)
+				throw new IllegalStateException("Active player with no location: " + player);
+			final double x = 1 - location.getX();
+			final double y = location.getY();
+			player.setLocation(new Coordinates() {
+				@Override
+				public double getX() {
+					return x;
+				}
+
+				@Override
+				public double getY() {
+					return y;
+				}
+			});
+		}
 	}
 
 	private void drawTeam(Team team) {

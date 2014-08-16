@@ -1,8 +1,11 @@
 package aj.soccer.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -20,7 +23,9 @@ import aj.soccer.images.ImageFactory;
  */
 public class Display implements SpriteManager {
 
-	private static final String BACKGROUND_IMG_PATH = "Soccer-pitch-horiz.jpg";
+	private static final File BACKGROUND_IMAGE_FILE = new File("images/Soccer-pitch-horiz.jpg");
+	private static final Image BACKGROUND_IMAGE = ImageFactory.loadImage(BACKGROUND_IMAGE_FILE);
+
 	private final JPanel panel;
 	/** Circular reference to main GUI for call-backs. */
 	private final DisplayToApp appGUI;
@@ -29,8 +34,6 @@ public class Display implements SpriteManager {
 	public Display(DisplayToApp appGUI) {
 		this.appGUI = appGUI;
 		panel = new DisplayPanel();
-		JLabel label = new JLabel(ImageFactory.loadImageIcon(BACKGROUND_IMG_PATH));
-		panel.add(label);
 	}
 
 	/**
@@ -75,6 +78,12 @@ public class Display implements SpriteManager {
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
+			//g.drawImage(BACKGROUND_IMAGE, 0, 0, null);
+			g.drawImage(
+					BACKGROUND_IMAGE, 
+					0, 0, panel.getWidth(), panel.getHeight(),
+					0, 0, BACKGROUND_IMAGE.getWidth(null), BACKGROUND_IMAGE.getHeight(null),
+					null);
 			Display.this.drawSprites(g);
 		}
 
@@ -86,6 +95,9 @@ public class Display implements SpriteManager {
 		}
 	}
 
+	private static final double WIDTH_SCALE = 0.01;
+	private static final double HEIGHT_SCALE = 0.01;
+	
 	private void drawSprite(Graphics g, Sprite sprite) {
 		Coordinates location = sprite.getLocation();
 		if (location == null) return;
@@ -93,10 +105,20 @@ public class Display implements SpriteManager {
 		double y = location.getY();
 		if (x < 0 || x > 1 || y < 0 || y > 1) return;
 		Rectangle bounds = panel.getBounds();
-		x = bounds.getMinX() + x * bounds.getWidth();
-		y = bounds.getMinY() + y * bounds.getHeight();
-		System.out.printf("Sprite @ (%d, %d)%n", (int) x, (int) y);
-		g.drawImage(sprite.getImage(), (int) x, (int) y, null);
+		int width = (int) (WIDTH_SCALE * bounds.getWidth());
+		int height = (int) (HEIGHT_SCALE * bounds.getHeight());
+		int x0 = (int) (bounds.getMinX() + x * bounds.getWidth()) - width / 2;
+		int y0 = (int) (bounds.getMinY() + y * bounds.getHeight()) - height / 2;
+		System.out.printf("Sprite @ (%d, %d)%n", x0, y0);
+		g.setColor(Color.RED);
+		g.fillOval(x0, y0, width, height);
+		/*
+		Image image = sprite.getImage();
+		g.drawImage(
+				image, 
+				x0, y0, x0 + width, y0 + width,
+				0, 0, image.getWidth(null), image.getHeight(null), null);
+		*/
 	}
 
 }
