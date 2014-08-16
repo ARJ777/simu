@@ -3,6 +3,7 @@ package aj.soccer.team;
 import java.awt.Image;
 import java.util.Collections;
 import java.util.List;
+
 import aj.soccer.data.Coordinates;
 import aj.soccer.data.Player;
 import aj.soccer.data.Position;
@@ -19,7 +20,7 @@ import aj.soccer.images.ImageFactory;
     private Coordinates location = null;
     private final Sprite sprite = new SpriteImpl();
     private Image image = null;
-    private final String imgNum;
+    private String imgNum;
 
     /*package-private*/ PlayerImpl(String playerName, List<Position> allowedPositions, String imgNum) {
 	this.playerName = playerName;
@@ -129,5 +130,15 @@ import aj.soccer.images.ImageFactory;
 	}
 
     }
+
+	@Override
+	public String getImageLabel() {
+		return imgNum;
+	}
+
+	@Override
+	public void setImageLabel(String imgLabel) {
+		this.imgNum = imgLabel;
+	}
 
 }

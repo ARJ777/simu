@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import aj.soccer.data.Formation;
 import aj.soccer.data.Player;
 import aj.soccer.data.Position;
@@ -27,6 +28,7 @@ public abstract class TeamFactory {
 	private static final String FIELD_SEPARATOR = ",";
 	private static final int NAME_FIELD_INDEX = 0;
 	private static final int IMAGE_NUMBER_FIELD_INDEX = 1;
+	private static final String ANY_IMAGE_VALUE = "*";
 	private static final int JERSEY_NUMBER_FIELD_INDEX = 2;
 	private static final int POSITIONS_FIELD_INDEX = 3;
 	private static final int MAX_ASSIGNMENT_ATTEMPTS = 20;
@@ -179,11 +181,14 @@ public abstract class TeamFactory {
 
 	private static Player parsePlayer(String line) {
 		String[] fields = line.split(FIELD_SEPARATOR);
+		String imgNum = fields[IMAGE_NUMBER_FIELD_INDEX].trim();
+		if (imgNum.isEmpty() || ANY_IMAGE_VALUE.equals(imgNum))
+			imgNum = null;
 		return new PlayerImpl(
 				fields[NAME_FIELD_INDEX].trim(),
 				getPositions(fields[POSITIONS_FIELD_INDEX].trim()),
-				fields[IMAGE_NUMBER_FIELD_INDEX].trim()
-				);
+				imgNum
+		);
 	}
 
 	private static List<Position> getPositions(String positionCodes) {

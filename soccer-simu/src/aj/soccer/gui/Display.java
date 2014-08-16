@@ -112,13 +112,11 @@ public class Display implements SpriteManager {
 		System.out.printf("Sprite @ (%d, %d)%n", x0, y0);
 		g.setColor(Color.RED);
 		g.fillOval(x0, y0, width, height);
-		/*
 		Image image = sprite.getImage();
 		g.drawImage(
 				image, 
 				x0, y0, x0 + width, y0 + width,
 				0, 0, image.getWidth(null), image.getHeight(null), null);
-		*/
 	}
 
 }

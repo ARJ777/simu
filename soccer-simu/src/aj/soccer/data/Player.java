@@ -85,4 +85,20 @@ public interface Player {
      */
     Sprite getSprite();
 
+    /**
+     * Obtains a label identifying the player image.
+     * 
+     * @return The image label, or a value of null if no preferred image has been
+     * specified.
+     */
+	/*@Nullable*/ String getImageLabel();
+
+	/**
+	 * Sets the label identifying the player image.
+	 * 
+	 * @param imgLabel - The image label, or a value of null if no
+	 * particular image is preferred.
+	 */
+	void setImageLabel(/*@Nullable*/ String imgLabel);
+
 }

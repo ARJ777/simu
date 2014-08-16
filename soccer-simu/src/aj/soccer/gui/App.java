@@ -54,7 +54,7 @@ public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp, Unc
 		Menus menuGUI = new Menus(this);
 		frame.setJMenuBar(menuGUI.getMenuBar());
 		frame.pack();
-		//setSize(250,250);
+		frame.setSize(1000,700);
 		frame.setVisible(true);
 	}
 
@@ -64,11 +64,20 @@ public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp, Unc
 			undrawTeam(team1);
 		team1 = team;
 		if (team != null) {
+			setDefaultPlayerImage(team.getPlayers(), "1");
 			formation1 = team.getFormation();
 			TeamFactory.selectPlayers(team, formation1);
 			drawTeam(team);
 		} else {
 			formation1 = null;
+		}
+	}
+
+	private void setDefaultPlayerImage(List<Player> players, String imgNum) {
+		for (Player player : players) {
+			String _imgNum = player.getImageLabel();
+			if (_imgNum == null)
+				player.setImageLabel(imgNum);
 		}
 	}
 
@@ -78,6 +87,7 @@ public class App extends GenericGUIImpl implements MenusToApp, DisplayToApp, Unc
 			undrawTeam(team2);
 		team2 = team;
 		if (team != null) {
+			setDefaultPlayerImage(team.getPlayers(), "2");
 			formation2 = team.getFormation();
 			TeamFactory.selectPlayers(team, formation2);
 			reverseLocations(team.getActivePlayers());
